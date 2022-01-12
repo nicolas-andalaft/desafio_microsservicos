@@ -2,7 +2,6 @@
 	<nav>
 		<router-link to="/">Home</router-link> |
 		<router-link to="/login" v-if="!authenticated">Login</router-link>
-		<router-link to="/profile" v-if="authenticated"> Profile </router-link>
 		<a v-if="authenticated" v-on:click="logout()"> Logout </a>
 	</nav>
 	<div id="content">
@@ -14,7 +13,9 @@
 export default {
 	name: 'app',
 	data: () => {
-		rauthenticated: false;
+		return {
+			authenticated: false,
+		};
 	},
 	async created() {
 		await this.isAuthenticated();
