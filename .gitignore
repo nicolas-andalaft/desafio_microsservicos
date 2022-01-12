@@ -22,3 +22,5 @@ pnpm-debug.log*
 *.sln
 *.sw?
 target/maven-status/maven-compiler-plugin/
+target/classes/
+target/*SNAPSHOT*
