@@ -8,7 +8,7 @@
 					<th>Name</th>
 					<th>Last Updated</th>
 					<th>Created ON</th>
-					<th>Symbol</th>
+					<th>Ativo</th>
 					<th>Ask Min</th>
 					<th>Bid Min</th>
 					<th>Bid Max</th>
@@ -16,8 +16,8 @@
 				<tbody>
 					<tr v-for="(entry, index) in stocksData" :key="index">
 						<td>{{ entry.stock_name }}</td>
-						<td>{{ entry.updated_on }}</td>
-						<td>{{ entry.created_on }}</td>
+						<td>{{ formatDate(entry.updated_on) }}</td>
+						<td>{{ formatDate(entry.created_on) }}</td>
 						<td>{{ entry.stock_symbol }}</td>
 						<td>{{ entry.ask_min }}</td>
 						<td>{{ entry.bid_min }}</td>
@@ -39,6 +39,7 @@ export default {
 	name: 'Home',
 	data: function () {
 		return {
+			userLocale: '',
 			claims: '',
 			stocksData: [],
 		};
@@ -48,6 +49,8 @@ export default {
 	},
 	methods: {
 		async setup() {
+			this.userLocale = navigator.languages[0] ?? 'en-US';
+
 			if (this.$root.authenticated) {
 				this.claims = await this.$auth.getUser();
 				let accessToken = this.$auth.getAccessToken();
@@ -61,6 +64,13 @@ export default {
 					this.stocksData = `${error}`;
 				}
 			}
+		},
+		formatDate(dateString) {
+			let date = new Date(dateString);
+			return date.toLocaleString(this.userLocale, {
+				dateStyle: 'short',
+				timeStyle: 'medium',
+			});
 		},
 	},
 };
