@@ -25,7 +25,5 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0"
-  },
-  "_id": "desafio-microsservicos@0.1.0",
-  "readme": "ERROR: No README data found!"
+  }
 }

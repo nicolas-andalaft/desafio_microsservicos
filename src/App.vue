@@ -1,21 +1,17 @@
 <template>
-	<nav>
-		<router-link to="/">Home</router-link> |
-		<router-link to="/login" v-if="!authenticated">Login</router-link>
+	<div id="nav">
+		<router-link to="/">Home</router-link>
+		<router-link to="/login" v-if="!authenticated"> Login </router-link>
 		<a v-if="authenticated" v-on:click="logout()"> Logout </a>
-	</nav>
-	<div id="content">
-		<router-view />
 	</div>
+	<router-view />
 </template>
 
 <script>
 export default {
 	name: 'app',
-	data: () => {
-		return {
-			authenticated: false,
-		};
+	data: function () {
+		return { authenticated: false };
 	},
 	async created() {
 		await this.isAuthenticated();

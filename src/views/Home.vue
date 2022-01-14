@@ -41,7 +41,7 @@ export default {
 		return {
 			userLocale: '',
 			claims: '',
-			stocksData: [],
+			stocksData: [{}],
 		};
 	},
 	created() {
@@ -59,9 +59,10 @@ export default {
 					let response = await axios.get('http://localhost:8082/stocks', {
 						headers: { Authorization: 'Bearer ' + accessToken },
 					});
+
 					this.stocksData = response.data;
 				} catch (error) {
-					this.stocksData = `${error}`;
+					console.error(`Error: ${error}`);
 				}
 			}
 		},
