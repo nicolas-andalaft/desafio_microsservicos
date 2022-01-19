@@ -1,7 +1,10 @@
 <template>
 	<div class="home">
 		<div v-if="this.$root.authenticated">
-			<p v-if="claims.name">Welcome, {{ claims.name }}!</p>
+			<div v-if="user.name">
+				<p>Welcome, {{ user.name }}!</p>
+				<p>Current ballance: {{ user.dollarBalance ?? 0 }} US</p>
+			</div>
 			<br />
 			<table>
 				<thead>
@@ -10,22 +13,21 @@
 					<th>Created ON</th>
 					<th>Ativo</th>
 					<th>Ask Min</th>
+					<th>Ask Max</th>
 					<th>Bid Min</th>
 					<th>Bid Max</th>
 				</thead>
 				<tbody>
 					<tr v-for="(entry, index) in stocksData" :key="index">
-						<td>{{ entry.stock_name }}</td>
-						<td>{{ formatDate(entry.updated_on) }}</td>
-						<td>{{ formatDate(entry.created_on) }}</td>
-						<td>{{ entry.stock_symbol }}</td>
-						<td>{{ entry.ask_min }}</td>
-						<td>{{ entry.bid_min }}</td>
-						<td>{{ entry.bid_max }}</td>
+						<td>{{ entry.stockName }}</td>
+						<td>{{ formatDate(entry.updatedOn) }}</td>
+						<td>{{ formatDate(entry.createdOn) }}</td>
+						<td>{{ entry.stockSymbol }}</td>
+						<td>{{ entry.askMin }}</td>
+						<td>{{ entry.askMax }}</td>
+						<td>{{ entry.bidMin }}</td>
+						<td>{{ entry.bidMax }}</td>
 					</tr>
-					<!-- <tr>
-						<td>{{ typeof stocksData }}</td>
-					</tr> -->
 				</tbody>
 			</table>
 		</div>
@@ -33,15 +35,16 @@
 </template>
 
 <script>
-import axios from 'axios';
+import StocksController from '../data/controllers/stocksController';
+import OrdersController from '../data/controllers/ordersController';
 
 export default {
 	name: 'Home',
 	data: function () {
 		return {
-			userLocale: '',
-			claims: '',
-			stocksData: [{}],
+			locale: '',
+			user: {},
+			stocksData: [],
 		};
 	},
 	created() {
@@ -49,26 +52,23 @@ export default {
 	},
 	methods: {
 		async setup() {
-			this.userLocale = navigator.languages[0] ?? 'en-US';
+			this.locale = navigator.languages[0] ?? 'en-US';
 
 			if (this.$root.authenticated) {
-				this.claims = await this.$auth.getUser();
+				let stocksController = new StocksController();
+				let ordersController = new OrdersController();
 				let accessToken = this.$auth.getAccessToken();
 
-				try {
-					let response = await axios.get('http://localhost:8082/stocks', {
-						headers: { Authorization: 'Bearer ' + accessToken },
-					});
+				this.stocksData = await stocksController.getStocks(accessToken);
 
-					this.stocksData = response.data;
-				} catch (error) {
-					console.error(`Error: ${error}`);
-				}
+				let claims = await this.$auth.getUser();
+				this.user = await ordersController.setUser(accessToken, claims.email);
+				this.user.name = claims.name;
 			}
 		},
 		formatDate(dateString) {
 			let date = new Date(dateString);
-			return date.toLocaleString(this.userLocale, {
+			return date.toLocaleString(this.locale, {
 				dateStyle: 'short',
 				timeStyle: 'medium',
 			});

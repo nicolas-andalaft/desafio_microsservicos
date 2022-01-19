@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';
+import router from './core/router';
 import OktaVue from '@okta/okta-vue';
-import { oktaAuth } from './okta';
+import { oktaAuth } from './core/okta';
 
 createApp(App)
 	.use(router)
