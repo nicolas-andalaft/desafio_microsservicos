@@ -1,21 +1,17 @@
 export default class UserEntity {
-	constructor(id, name, username, dollarBalance, createdOn, updatedOn) {
+	id;
+	name;
+	username;
+	dollar_balance;
+	created_on;
+	updated_on;
+
+	constructor(id, name, username, dollar_balance, created_on, updated_on) {
 		this.id = id;
 		this.name = name;
 		this.username = username;
-		this.dollarBalance = dollarBalance;
-		this.createdOn = createdOn;
-		this.updatedOn = updatedOn;
-	}
-
-	static fromMap(map) {
-		return new UserEntity(
-			map.id,
-			map.name,
-			map.username,
-			map.dollar_balance,
-			map.created_on,
-			map.updated_on
-		);
+		this.dollar_balance = dollar_balance;
+		this.created_on = created_on;
+		this.updated_on = updated_on;
 	}
 }

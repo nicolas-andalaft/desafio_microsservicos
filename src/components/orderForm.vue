@@ -2,15 +2,19 @@
 	<div>
 		<form>
 			<label for="stock_symbol">Stock Symbol</label>
-			<select id="stock_symbol" v-model="stock_symbol" required>
-				<option v-for="(stock, index) in stocksList" v-bind:key="index">
+			<select id="stock_symbol" v-model="stockIndex" required>
+				<option
+					v-for="(stock, index) in stocksList"
+					v-bind:key="index"
+					:value="index"
+				>
 					{{ stock.stock_symbol }}
 				</option>
 			</select>
 			<br />
 			<label for="type">Type</label>
-			<select id="type" required>
-				<option v-for="opt in type" v-bind:key="opt">
+			<select id="type" v-model="type" required>
+				<option v-for="(opt, index) in types" v-bind:key="index" :value="index">
 					{{ opt }}
 				</option>
 			</select>
@@ -37,7 +41,7 @@
 			/>
 			<br />
 			<p>{{ volume * value }}</p>
-			<button>Confirm</button>
+			<button v-on:click="newOrder()" type="button">Confirm</button>
 		</form>
 	</div>
 </template>
@@ -58,30 +62,34 @@ export default {
 	data: function () {
 		return {
 			controller: new OrdersController(),
-			stock_symbol: null,
+			stockIndex: null,
 			value: 1.0,
 			volume: 10,
-			type: ['Buy', 'Sell'],
+			types: ['Buy', 'Sell'],
+			type: null,
 		};
 	},
 	updated() {
-		if (
-			this.stock_symbol == null &&
-			typeof this.$props.stocksList[0] != 'undefined'
-		)
+		if (this.type == null && typeof this.$props.stocksList[0] != 'undefined')
 			this.stock_symbol = this.$props.stocksList[0].stock_symbol;
 	},
 	methods: {
 		newOrder() {
+			if (this.stockIndex == null) return;
+
 			let accessToken = this.$auth.getAccessToken();
+			let selectedStock = this.$props.stocksList[this.stockIndex];
 
 			let order = new OrderEntity();
 			order.id_user = this.user.id;
+			order.id_stock = selectedStock.id;
+			order.stock_symbol = selectedStock.stock_symbol;
+			order.stock_name = selectedStock.stock_name;
 			order.volume = this.volume;
-			order.price = this.price;
+			order.price = this.value;
 			order.type = this.type;
 
-			this.controller.newOrder(accessToken);
+			this.controller.newOrder(accessToken, order);
 		},
 	},
 };

@@ -1,40 +1,25 @@
 export default class StockEntity {
 	constructor(
 		id,
-		marketCap,
-		stockSymbol,
-		stockName,
-		askMin,
-		askMax,
-		bidMin,
-		bidMax,
-		createdOn,
-		updatedOn
+		market_cap,
+		stock_symbol,
+		stock_name,
+		ask_min,
+		ask_max,
+		bid_min,
+		bid_max,
+		created_on,
+		updated_on
 	) {
-		this.id = id;
-		this.marketCap = marketCap;
-		this.stockSymbol = stockSymbol;
-		this.stockName = stockName;
-		this.askMin = askMin;
-		this.askMax = askMax;
-		this.bidMin = bidMin;
-		this.bidMax = bidMax;
-		this.createdOn = createdOn;
-		this.updatedOn = updatedOn;
-	}
-
-	static fromMap(map) {
-		return new StockEntity(
-			map.id,
-			map.market_cap,
-			map.stock_symbol,
-			map.stock_name,
-			map.ask_min,
-			map.ask_max,
-			map.bid_min,
-			map.bid_max,
-			map.created_on,
-			map.updated_on
-		);
+		(this.id = id),
+			(this.market_cap = market_cap),
+			(this.stock_symbol = stock_symbol),
+			(this.stock_name = stock_name),
+			(this.ask_min = ask_min),
+			(this.ask_max = ask_max),
+			(this.bid_min = bid_min),
+			(this.bid_max = bid_max),
+			(this.created_on = created_on),
+			(this.updated_on = updated_on);
 	}
 }

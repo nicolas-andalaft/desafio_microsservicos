@@ -16,9 +16,9 @@ export default class StocksAPI {
 
 			let result = [];
 			response.data.forEach((stock) => {
-				result.push(StockEntity.fromMap(stock));
+				result.push(Object.assign(new StockEntity(), stock));
 			});
-			console.log(result);
+
 			return result;
 		} catch (error) {
 			console.error(`Error: ${error}`);
