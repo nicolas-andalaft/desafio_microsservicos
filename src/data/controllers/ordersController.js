@@ -6,7 +6,12 @@ export default class OrdersController {
 	}
 
 	setUser(accessToken, email) {
-		return this.datasource.setUser(accessToken, email);
+		try {
+			return this.datasource.setUser(accessToken, email);
+		} catch (e) {
+			//console.error(e);
+			return null;
+		}
 	}
 
 	newOrder(accessToken, order) {

@@ -6,6 +6,7 @@ export default class StocksAPI {
 
 	async getStocks(accessToken) {
 		let endpoint = '/stocks';
+		let result = [];
 
 		try {
 			let response = await axios.get(this.baseUrl + endpoint, {
@@ -14,15 +15,13 @@ export default class StocksAPI {
 				},
 			});
 
-			let result = [];
 			response.data.forEach((stock) => {
 				result.push(Object.assign(new StockEntity(), stock));
 			});
-
-			return result;
 		} catch (error) {
-			console.error(`Error: ${error}`);
-			return null;
+			console.info('Stocks endpoint could not be accessed');
 		}
+
+		return result;
 	}
 }

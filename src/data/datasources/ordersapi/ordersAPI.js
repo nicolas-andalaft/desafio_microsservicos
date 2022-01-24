@@ -20,7 +20,7 @@ export default class OrdersAPI {
 
 			return Object.assign(new UserEntity(), response.data.user);
 		} catch (error) {
-			console.error(`Error: ${error}`);
+			console.info('User endpoint could not be accessed');
 			return null;
 		}
 	}
@@ -40,7 +40,7 @@ export default class OrdersAPI {
 
 			return Object.assign(new OrderEntity(), response.data.order);
 		} catch (error) {
-			console.error(`Error: ${error}`);
+			console.info('New order endpoint could not be accessed');
 			return null;
 		}
 	}

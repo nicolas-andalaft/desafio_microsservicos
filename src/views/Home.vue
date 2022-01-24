@@ -3,7 +3,10 @@
 		<div v-if="this.$root.authenticated">
 			<div v-if="user.name">
 				<p>Welcome, {{ user.name }}!</p>
-				<p>Current ballance: {{ user.dollar_balance ?? 0 }} US</p>
+				<p>
+					Current ballance:
+					{{ user.dollar_balance ? user.dollar_balance + 'US' : 'unavailable' }}
+				</p>
 			</div>
 			<br />
 			<div class="d-flex">
@@ -19,7 +22,7 @@
 						<th>Bid Max</th>
 					</thead>
 					<tbody>
-						<tr v-for="(entry, index) in stocksData" :key="index">
+						<tr v-for="(entry, index) in stocksList" :key="index">
 							<td>{{ entry.stock_name }}</td>
 							<td>{{ formatDate(entry.updated_on) }}</td>
 							<td>{{ formatDate(entry.created_on) }}</td>
@@ -33,7 +36,7 @@
 				</table>
 				<order-form
 					:user="this.user"
-					:stocksList="this.stocksData"
+					:stocksList="this.stocksList"
 				></order-form>
 			</div>
 		</div>
@@ -51,7 +54,7 @@ export default {
 		return {
 			locale: '',
 			user: {},
-			stocksData: [],
+			stocksList: [],
 		};
 	},
 	components: {
@@ -67,13 +70,19 @@ export default {
 			if (this.$root.authenticated) {
 				let stocksController = new StocksController();
 				let ordersController = new OrdersController();
-				let accessToken = this.$auth.getAccessToken();
 
 				let claims = await this.$auth.getUser();
-				this.user = await ordersController.setUser(accessToken, claims.email);
-				this.user.name = claims.name;
+				let accessToken = this.$auth.getAccessToken();
 
-				this.stocksData = await stocksController.getStocks(accessToken);
+				ordersController.setUser(accessToken, claims.email).then((result) => {
+					if (result) this.user = result;
+
+					this.user.name = claims.name;
+				});
+
+				stocksController.getStocks(accessToken).then((result) => {
+					if (result) this.stocksList = result;
+				});
 			}
 		},
 		formatDate(dateString) {

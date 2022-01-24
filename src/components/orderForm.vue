@@ -52,12 +52,8 @@ import OrderEntity from '../data/entities/orderEntity';
 
 export default {
 	props: {
-		user: {
-			required: true,
-		},
-		stocksList: {
-			required: true,
-		},
+		user: null,
+		stocksList: null,
 	},
 	data: function () {
 		return {
@@ -70,12 +66,13 @@ export default {
 		};
 	},
 	updated() {
-		if (this.type == null && typeof this.$props.stocksList[0] != 'undefined')
+		if (this.$props.stocksList && this.$props.stocksList.length > 0)
 			this.stock_symbol = this.$props.stocksList[0].stock_symbol;
 	},
 	methods: {
 		newOrder() {
 			if (this.stockIndex == null) return;
+			if (this.user == null) return;
 
 			let accessToken = this.$auth.getAccessToken();
 			let selectedStock = this.$props.stocksList[this.stockIndex];
