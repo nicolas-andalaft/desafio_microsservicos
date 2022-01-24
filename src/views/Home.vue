@@ -10,30 +10,8 @@
 			</div>
 			<br />
 			<div class="d-flex">
-				<table>
-					<thead>
-						<th>Name</th>
-						<th>Last Updated</th>
-						<th>Created ON</th>
-						<th>Ativo</th>
-						<th>Ask Min</th>
-						<th>Ask Max</th>
-						<th>Bid Min</th>
-						<th>Bid Max</th>
-					</thead>
-					<tbody>
-						<tr v-for="(entry, index) in stocksList" :key="index">
-							<td>{{ entry.stock_name }}</td>
-							<td>{{ formatDate(entry.updated_on) }}</td>
-							<td>{{ formatDate(entry.created_on) }}</td>
-							<td>{{ entry.stock_symbol }}</td>
-							<td>{{ entry.ask_min }}</td>
-							<td>{{ entry.ask_max }}</td>
-							<td>{{ entry.bid_min }}</td>
-							<td>{{ entry.bid_max }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<stocks-table :stocksList="stocksList" :locale="getLocale()">
+				</stocks-table>
 				<order-form
 					:user="this.user"
 					:stocksList="this.stocksList"
@@ -46,27 +24,26 @@
 <script>
 import StocksController from '../data/controllers/stocksController';
 import OrdersController from '../data/controllers/ordersController';
-import OrderForm from '../components/orderForm.vue';
+import OrderForm from '../components/orderForm';
+import StocksTable from '../components/stocksTable.vue';
 
 export default {
 	name: 'Home',
 	data: function () {
 		return {
-			locale: '',
 			user: {},
 			stocksList: [],
 		};
 	},
 	components: {
 		OrderForm,
+		StocksTable,
 	},
 	created() {
 		this.setup();
 	},
 	methods: {
 		async setup() {
-			this.locale = navigator.languages[0] ?? 'en-US';
-
 			if (this.$root.authenticated) {
 				let stocksController = new StocksController();
 				let ordersController = new OrdersController();
@@ -81,16 +58,14 @@ export default {
 				});
 
 				stocksController.getStocks(accessToken).then((result) => {
-					if (result) this.stocksList = result;
+					if (result) {
+						this.stocksList = result;
+					}
 				});
 			}
 		},
-		formatDate(dateString) {
-			let date = new Date(dateString);
-			return date.toLocaleString(this.locale, {
-				dateStyle: 'short',
-				timeStyle: 'medium',
-			});
+		getLocale() {
+			return navigator.languages[0];
 		},
 	},
 };
