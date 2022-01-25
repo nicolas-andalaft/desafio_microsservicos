@@ -1,93 +1,127 @@
 <template>
 	<div>
-		<form>
-			<label for="stock_symbol">Stock Symbol</label>
-			<select id="stock_symbol" v-model="stockIndex" required>
-				<option
-					v-for="(stock, index) in stocksList"
-					v-bind:key="index"
-					:value="index"
+		<n-form :model="model" :rules="rules" ref="formRef">
+			<n-form-item label="Stock" path="stock_id">
+				<n-select
+					placeholder="Type the desired stock"
+					:options="symbolsList"
+					v-model:value="model.stock_id"
+					filterable
 				>
-					{{ stock.stock_symbol }}
-				</option>
-			</select>
-			<br />
-			<label for="type">Type</label>
-			<select id="type" v-model="type" required>
-				<option v-for="(opt, index) in types" v-bind:key="index" :value="index">
-					{{ opt }}
-				</option>
-			</select>
-			<br />
-			<label for="value">Value</label>
-			<input
-				id="value"
-				v-model="value"
-				type="number"
-				min="0.01"
-				step="0.01"
-				onkeypress="return /([0-9]|,|.)/.test(event.key)"
-				required
-			/>
-			<br />
-			<label for="volume">Volume</label>
-			<input
-				id="volume"
-				v-model="volume"
-				type="number"
-				min="1"
-				onkeypress="return /[0-9]/.test(event.key)"
-				required
-			/>
-			<br />
-			<p>{{ volume * value }}</p>
-			<button v-on:click="newOrder()" type="button">Confirm</button>
-		</form>
+				</n-select>
+			</n-form-item>
+
+			<n-form-item label="Value" path="price">
+				<n-input-number
+					:min="0.01"
+					:step="0.01"
+					id="value"
+					v-model:value="model.price"
+				>
+					<template #prefix>$</template>
+				</n-input-number>
+			</n-form-item>
+
+			<n-form-item label="Volume" path="volume">
+				<n-input-number
+					:min="1"
+					:step="10"
+					id="volume"
+					v-model:value="model.volume"
+				>
+				</n-input-number>
+			</n-form-item>
+
+			<p>{{ model.volume * model.price }}</p>
+			<n-button @click="validate" :loading="loading" type="primary" size="large"
+				>Buy</n-button
+			>
+		</n-form>
 	</div>
 </template>
 
 <script>
 import OrdersController from '../data/controllers/ordersController';
+import { ref } from 'vue';
+import { NForm, NFormItem, NInputNumber, NSelect, NButton } from 'naive-ui';
 import OrderEntity from '../data/entities/orderEntity';
 
 export default {
+	components: {
+		NForm,
+		NFormItem,
+		NInputNumber,
+		NSelect,
+		NButton,
+	},
 	props: {
 		user: null,
 		stocksList: null,
 	},
 	data: function () {
 		return {
-			controller: new OrdersController(),
-			stockIndex: null,
-			value: 1.0,
-			volume: 10,
-			types: ['Buy', 'Sell'],
-			type: null,
+			symbolsList: [],
+			loading: false,
+		};
+	},
+	setup(props) {
+		const formRef = ref(null);
+		const formModel = ref({
+			stock_id: null,
+			price: null,
+			volume: null,
+		});
+		return {
+			formRef,
+			model: formModel,
+			rules: {
+				stock_id: {
+					required: true,
+					message: 'Enter a valid stock',
+				},
+				price: {
+					required: true,
+					message: 'Enter a price value',
+				},
+				volume: {
+					validator(rule, value) {
+						if (!value) return new Error('Enter a volume value');
+						if (!Number.isInteger(value))
+							return new Error('Volume must be a integer number');
+					},
+				},
+			},
+			validate(e) {
+				e.preventDefault();
+				formRef.value
+					.validate((errors) => {
+						if (errors) return;
+
+						let controller = new OrdersController();
+						let accessToken = formRef.value.$data.authState.accessToken;
+						let order = new OrderEntity();
+
+						order.id_user = props.user.id;
+						order.id_stock = formRef.value.model.stock_id;
+						order.volume = formRef.value.model.volume;
+						order.price = formRef.value.model.price;
+						order.type = 0;
+						controller.newOrder(accessToken, order);
+					})
+					.catch(() => {});
+			},
 		};
 	},
 	updated() {
-		if (this.$props.stocksList && this.$props.stocksList.length > 0)
+		if (this.symbolsList.length == 0 && this.$props.stocksList.length > 0) {
 			this.stock_symbol = this.$props.stocksList[0].stock_symbol;
-	},
-	methods: {
-		newOrder() {
-			if (this.stockIndex == null) return;
-			if (this.user == null) return;
-
-			let accessToken = this.$auth.getAccessToken();
-			let selectedStock = this.$props.stocksList[this.stockIndex];
-
-			let order = new OrderEntity();
-			order.id_user = this.user.id;
-			order.id_stock = selectedStock.id;
-			order.stock_symbol = selectedStock.stock_symbol;
-			order.stock_name = selectedStock.stock_name;
-			order.volume = this.volume;
-			order.price = this.value;
-			order.type = this.type;
-
-			this.controller.newOrder(accessToken, order);
-		},
+			this.symbolsList = this.$props.stocksList.map((stock) => {
+				return {
+					label: stock.stock_name + ' - ' + stock.stock_symbol,
+					value: stock.id,
+				};
+			});
+		}
 	},
 };
 </script>
