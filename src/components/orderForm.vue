@@ -41,10 +41,9 @@
 </template>
 
 <script>
-import OrdersController from '../data/controllers/ordersController';
 import { ref } from 'vue';
 import { NForm, NFormItem, NInputNumber, NSelect, NButton } from 'naive-ui';
-import OrderEntity from '../data/entities/orderEntity';
+import OrdersController from '@/controllers/OrdersController';
 
 export default {
 	components: {
@@ -97,16 +96,15 @@ export default {
 					.validate((errors) => {
 						if (errors) return;
 
-						let controller = new OrdersController();
 						let accessToken = formRef.value.$data.authState.accessToken;
-						let order = new OrderEntity();
+						let order = {};
 
 						order.id_user = props.user.id;
 						order.id_stock = formRef.value.model.stock_id;
 						order.volume = formRef.value.model.volume;
 						order.price = formRef.value.model.price;
 						order.type = 0;
-						controller.newOrder(accessToken, order);
+						OrdersController.newOrder(accessToken, order);
 					})
 					.catch(() => {});
 			},

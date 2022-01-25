@@ -6,7 +6,7 @@
 
 <script>
 import { NDataTable, NSpin } from 'naive-ui';
-import DateFormat from '../utils/DateFormat';
+import DateFormat from '@/helpers/DateFormat';
 
 export default {
 	props: {

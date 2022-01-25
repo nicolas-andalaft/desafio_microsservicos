@@ -6,7 +6,7 @@
 
 <script>
 import '@okta/okta-signin-widget/dist/css/okta-sign-in.min.css';
-import { oktaSignIn } from '../core/okta';
+import { oktaSignIn } from '@/okta';
 
 export default {
 	name: 'Login',

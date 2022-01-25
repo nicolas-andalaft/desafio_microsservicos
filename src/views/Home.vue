@@ -5,7 +5,9 @@
 				<p>Welcome, {{ user.name }}!</p>
 				<p>
 					Current ballance:
-					{{ user.dollar_balance ? user.dollar_balance + 'US' : 'unavailable' }}
+					{{
+						user.dollar_balance ? user.dollar_balance + ' US' : 'unavailable'
+					}}
 				</p>
 			</div>
 			<br />
@@ -22,10 +24,10 @@
 </template>
 
 <script>
-import StocksController from '../data/controllers/stocksController';
-import OrdersController from '../data/controllers/ordersController';
-import OrderForm from '../components/orderForm';
-import StocksTable from '../components/stocksTable.vue';
+import StocksController from '@/controllers/StocksController';
+import OrdersController from '@/controllers/OrdersController';
+import OrderForm from '@/components/orderForm';
+import StocksTable from '@/components/stocksTable';
 
 export default {
 	name: 'Home',
@@ -45,19 +47,16 @@ export default {
 	methods: {
 		async setup() {
 			if (this.$root.authenticated) {
-				let stocksController = new StocksController();
-				let ordersController = new OrdersController();
-
 				let claims = await this.$auth.getUser();
 				let accessToken = this.$auth.getAccessToken();
 
-				ordersController.setUser(accessToken, claims.email).then((result) => {
+				OrdersController.getUser(accessToken, claims.email).then((result) => {
 					if (result) this.user = result;
 
 					this.user.name = claims.name;
 				});
 
-				stocksController.getStocks(accessToken).then((result) => {
+				StocksController.getStocks(accessToken).then((result) => {
 					if (result) {
 						this.stocksList = result;
 					}
