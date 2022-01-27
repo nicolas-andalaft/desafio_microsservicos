@@ -56,6 +56,7 @@ export default {
 	props: {
 		user: null,
 		stocksList: null,
+		onValid: Function,
 	},
 	data: function () {
 		return {
@@ -93,7 +94,7 @@ export default {
 			validate(e) {
 				e.preventDefault();
 				formRef.value
-					.validate((errors) => {
+					.validate(async (errors) => {
 						if (errors) return;
 
 						let accessToken = formRef.value.$data.authState.accessToken;
@@ -104,7 +105,9 @@ export default {
 						order.volume = formRef.value.model.volume;
 						order.price = formRef.value.model.price;
 						order.type = 0;
-						OrdersController.newOrder(accessToken.accessToken, order);
+						await OrdersController.newOrder(accessToken.accessToken, order);
+
+						if (props.onValid) props.onValid();
 					})
 					.catch(() => {});
 			},

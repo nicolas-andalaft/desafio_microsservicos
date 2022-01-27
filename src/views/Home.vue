@@ -17,6 +17,7 @@
 				<order-form
 					:user="this.user"
 					:stocksList="this.stocksList"
+					:onValid="this.updateUserAndOrders"
 				></order-form>
 				<div>
 					<order-card
@@ -51,34 +52,47 @@ export default {
 		StocksTable,
 		OrderCard,
 	},
-	created() {
-		this.setup();
+	async created() {
+		if (this.$root.authenticated) {
+			// Set user information
+			let claims = await this.$auth.getUser();
+			this.user.name = claims.name;
+			this.user.username = claims.email;
+
+			this.updateStocks();
+			this.updateUserAndOrders();
+		}
 	},
 	methods: {
-		async setup() {
-			if (this.$root.authenticated) {
-				let claims = await this.$auth.getUser();
-				let accessToken = this.$auth.getAccessToken();
-				OrdersController.getUser(accessToken, claims.email).then((result) => {
-					if (result) {
-						this.user = result;
+		async updateStocks() {
+			let accessToken = this.$auth.getAccessToken();
 
-						OrdersController.getUserOrders(accessToken, this.user).then(
-							(result) => {
-								this.orders = result;
-							}
-						);
-					}
+			StocksController.getStocks(accessToken).then((result) => {
+				if (result) {
+					this.stocksList = result;
+				}
+			});
+		},
+		async updateUserAndOrders() {
+			let accessToken = this.$auth.getAccessToken();
 
-					this.user.name = claims.name;
-				});
+			let userResp = await OrdersController.getUser(
+				accessToken,
+				this.user.username
+			);
+			if (!userResp) return;
 
-				StocksController.getStocks(accessToken).then((result) => {
-					if (result) {
-						this.stocksList = result;
-					}
-				});
-			}
+			// Update user object with response
+			// (used to update dollar balance)
+			Object.assign(this.user, userResp);
+
+			let ordersResp = await OrdersController.getUserOrders(
+				accessToken,
+				this.user
+			);
+			if (!ordersResp) return;
+
+			this.orders = ordersResp;
 		},
 		getLocale() {
 			return navigator.languages[0];
