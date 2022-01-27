@@ -6,15 +6,14 @@ export default class OrdersController {
 	}
 
 	static async getUser(accessToken, email) {
-		let response = await OrdersController.datasource.getUser(
-			accessToken,
-			email
-		);
-
-		return response?.user;
+		return await OrdersController.datasource.getUser(accessToken, email);
 	}
 
 	static async newOrder(accessToken, order) {
 		return await OrdersController.datasource.newOrder(accessToken, order);
+	}
+
+	static async getUserOrders(accessToken, user) {
+		return await OrdersController.datasource.getUserOrders(accessToken, user);
 	}
 }

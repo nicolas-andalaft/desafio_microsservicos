@@ -18,6 +18,13 @@
 					:user="this.user"
 					:stocksList="this.stocksList"
 				></order-form>
+				<div>
+					<order-card
+						v-for="(order, index) in orders"
+						v-bind:key="index"
+						:order="order"
+					></order-card>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -28,6 +35,7 @@ import StocksController from '@/controllers/StocksController';
 import OrdersController from '@/controllers/OrdersController';
 import OrderForm from '@/components/orderForm';
 import StocksTable from '@/components/stocksTable';
+import OrderCard from '@/components/orderCard';
 
 export default {
 	name: 'Home',
@@ -35,11 +43,13 @@ export default {
 		return {
 			user: {},
 			stocksList: [],
+			orders: [],
 		};
 	},
 	components: {
 		OrderForm,
 		StocksTable,
+		OrderCard,
 	},
 	created() {
 		this.setup();
@@ -49,9 +59,16 @@ export default {
 			if (this.$root.authenticated) {
 				let claims = await this.$auth.getUser();
 				let accessToken = this.$auth.getAccessToken();
-
 				OrdersController.getUser(accessToken, claims.email).then((result) => {
-					if (result) this.user = result;
+					if (result) {
+						this.user = result;
+
+						OrdersController.getUserOrders(accessToken, this.user).then(
+							(result) => {
+								this.orders = result;
+							}
+						);
+					}
 
 					this.user.name = claims.name;
 				});

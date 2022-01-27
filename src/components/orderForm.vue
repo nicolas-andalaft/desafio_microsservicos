@@ -104,7 +104,7 @@ export default {
 						order.volume = formRef.value.model.volume;
 						order.price = formRef.value.model.price;
 						order.type = 0;
-						OrdersController.newOrder(accessToken, order);
+						OrdersController.newOrder(accessToken.accessToken, order);
 					})
 					.catch(() => {});
 			},
