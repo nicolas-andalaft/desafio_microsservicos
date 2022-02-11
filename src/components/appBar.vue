@@ -1,14 +1,28 @@
 <template>
-	<n-menu
-		:options="menuOptions.value"
-		v-model:value="activeKey"
-		mode="horizontal"
-		class="navbar"
-	></n-menu>
+	<nav>
+		<n-menu
+			:options="defaultMenu"
+			v-model:value="activeKey"
+			mode="horizontal"
+		></n-menu>
+		<n-menu
+			v-if="authenticated === true"
+			:options="authMenu"
+			v-model:value="activeKey"
+			mode="horizontal"
+			class="authMenu"
+		></n-menu>
+		<n-menu
+			v-if="authenticated === false"
+			:options="noAuthMenu"
+			v-model:value="activeKey"
+			mode="horizontal"
+		></n-menu>
+	</nav>
 </template>
 
 <script>
-import { h, ref } from 'vue';
+import { h } from 'vue';
 import { NMenu, NIcon } from 'naive-ui';
 import { MdPerson, MdCash, MdExit, MdContact } from '@vicons/ionicons4';
 
@@ -18,6 +32,9 @@ function renderIcon(icon) {
 
 export default {
 	props: {
+		authenticated: {
+			type: Boolean,
+		},
 		user: {},
 		logout: null,
 	},
@@ -40,6 +57,10 @@ export default {
 			},
 		];
 		const authMenu = [
+			{
+				label: () => h('a', { href: '/profile' }, 'Profile'),
+				key: 'profile',
+			},
 			{
 				label: () =>
 					h(
@@ -64,43 +85,27 @@ export default {
 			},
 		];
 
-		let menuOptions = ref(defaultMenu);
-		menuOptions.value = defaultMenu;
 		return {
 			activeKey,
 			defaultMenu,
 			noAuthMenu,
 			authMenu,
-			menuOptions,
 		};
-	},
-	beforeMount() {
-		this.updateAppBar();
-	},
-	methods: {
-		async updateAppBar() {
-			let authenticated = await this.$auth.isAuthenticated();
-
-			if (authenticated) {
-				this.menuOptions.value = [...this.defaultMenu, ...this.authMenu];
-			} else {
-				this.menuOptions.value = [...this.defaultMenu, ...this.noAuthMenu];
-			}
-		},
 	},
 };
 </script>
 
 <style>
-.navbar {
-	width: 100%;
-	height: 3.5rem;
+nav {
+	display: flex;
 	align-items: center;
+	justify-content: space-between;
+	height: 4rem;
 }
-.navbar :first-child {
-	flex-grow: 1;
+.authMenu {
+	display: contents !important;
 }
-.grow {
-	flex-grow: 1;
+.authMenu :nth-child(1) {
+	margin-right: auto !important;
 }
 </style>

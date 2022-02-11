@@ -1,8 +1,11 @@
 <template>
 	<n-config-provider :theme="darkTheme">
-		<nav>
-			<app-bar :user="user" :logout="logout"></app-bar>
-		</nav>
+		<app-bar
+			:authenticated="authenticated"
+			:user="user"
+			:logout="logout"
+			class="nav"
+		/>
 		<router-view />
 	</n-config-provider>
 </template>
@@ -50,6 +53,10 @@ export default {
 	methods: {
 		async isAuthenticated() {
 			this.authenticated = await this.$auth.isAuthenticated();
+			console.log(
+				'🚀 ~ file: App.vue ~ line 57 ~ isAuthenticated ~ this.authenticated',
+				this.authenticated
+			);
 		},
 	},
 };
@@ -60,10 +67,5 @@ body {
 	background-color: #131315;
 	color: white;
 	padding: 0 20px 20px 20px;
-}
-
-nav {
-	display: flex;
-	justify-content: center;
 }
 </style>
