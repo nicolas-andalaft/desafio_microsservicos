@@ -1,12 +1,12 @@
 <template>
-	<n-spin :show="stocksList.length == 0" size="large">
-		<n-data-table :columns="columns" :data="stocksList" />
+	<n-spin :show="stocksList.length == 0" size="small">
+		<n-data-table :columns="columns" :data="stocksList" class="smallTable" />
 	</n-spin>
 </template>
 
 <script>
-import { NDataTable, NSpin } from 'naive-ui';
-import DateFormat from '@/helpers/DateFormat';
+import { h } from 'vue';
+import { NDataTable, NSpin, NTime } from 'naive-ui';
 
 export default {
 	props: {
@@ -14,7 +14,6 @@ export default {
 			type: Array,
 			default: () => [],
 		},
-		locale: null,
 	},
 	data: function () {
 		return {
@@ -26,29 +25,34 @@ export default {
 		NSpin,
 	},
 	mounted() {
-		let locale = this.$props.locale;
 		this.columns = [
 			{
 				title: 'Name',
 				key: 'stock_name',
 			},
 			{
-				title: 'Last Updated',
-				key: 'updated_on',
-				render(row) {
-					return DateFormat.format(row.updated_on, locale);
-				},
-			},
-			{
-				title: 'Created ON',
-				key: 'created_on',
-				render(row) {
-					return DateFormat.format(row.created_on, locale);
-				},
-			},
-			{
 				title: 'Symbol',
 				key: 'stock_symbol',
+			},
+			{
+				title: 'Updated',
+				key: 'updated_on',
+				render(row) {
+					return h(NTime, {
+						time: Date.parse(row.updated_on),
+						type: 'relative',
+					});
+				},
+			},
+			{
+				title: 'Created',
+				key: 'created_on',
+				render(row) {
+					return h(NTime, {
+						time: Date.parse(row.created_on),
+						type: 'relative',
+					});
+				},
 			},
 			{
 				title: 'Ask Min',
@@ -70,3 +74,9 @@ export default {
 	},
 };
 </script>
+
+<style>
+.smallTable {
+	font-size: 0.8rem;
+}
+</style>
