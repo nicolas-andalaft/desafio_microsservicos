@@ -1,11 +1,17 @@
 <template>
 	<n-spin :show="stocksList.length == 0" size="small">
-		<n-data-table :columns="columns" :data="stocksList" class="smallTable" />
+		<n-data-table
+			:columns="columns"
+			:data="stocksList"
+			:single-line="false"
+			:pagination="pagination"
+			class="smallTable"
+		/>
 	</n-spin>
 </template>
 
 <script>
-import { h } from 'vue';
+import { h, reactive } from 'vue';
 import { NDataTable, NSpin, NTime } from 'naive-ui';
 
 export default {
@@ -15,33 +21,16 @@ export default {
 			default: () => [],
 		},
 	},
-	data: function () {
-		return {
-			columns: [],
-		};
-	},
 	components: {
 		NDataTable,
 		NSpin,
 	},
-	mounted() {
-		this.columns = [
+	setup() {
+		let columns = [
 			{
-				title: 'Name',
-				key: 'stock_name',
-			},
-			{
-				title: 'Symbol',
-				key: 'stock_symbol',
-			},
-			{
-				title: 'Updated',
-				key: 'updated_on',
+				title: 'Stock',
 				render(row) {
-					return h(NTime, {
-						time: Date.parse(row.updated_on),
-						type: 'relative',
-					});
+					return h('div', {}, `${row.stock_name} - ${row.stock_symbol}`);
 				},
 			},
 			{
@@ -55,22 +44,55 @@ export default {
 				},
 			},
 			{
-				title: 'Ask Min',
-				key: 'ask_min',
+				title: 'Updated',
+				key: 'updated_on',
+				render(row) {
+					return h(NTime, {
+						time: Date.parse(row.updated_on),
+						type: 'relative',
+					});
+				},
 			},
 			{
-				title: 'Ask Max',
-				key: 'ask_max',
+				title: 'Ask',
+				align: 'center',
+				children: [
+					{
+						title: 'Min',
+						key: 'ask_min',
+					},
+					{
+						title: 'Max',
+						key: 'ask_max',
+					},
+				],
 			},
 			{
-				title: 'Bid Min',
-				key: 'bid_min',
-			},
-			{
-				title: 'Bid Max',
-				key: 'bid_max',
+				title: 'Bid',
+				align: 'center',
+				children: [
+					{
+						title: 'Min',
+						key: 'bid_min',
+					},
+					{
+						title: 'Max',
+						key: 'bid_max',
+					},
+				],
 			},
 		];
+
+		let pagination = reactive({
+			page: 1,
+			pageSize: 50,
+			onChange: (page) => (pagination.page = page),
+		});
+
+		return {
+			columns,
+			pagination,
+		};
 	},
 };
 </script>

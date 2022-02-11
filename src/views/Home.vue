@@ -14,7 +14,6 @@ import StocksController from '@/controllers/StocksController';
 import StocksTable from '@/components/stocksTable';
 
 export default {
-	name: 'Home',
 	data: function () {
 		return {
 			stocksList: [],
