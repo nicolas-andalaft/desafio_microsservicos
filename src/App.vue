@@ -1,21 +1,47 @@
 <template>
-	<div id="nav">
-		<router-link to="/">Home</router-link>
-		<router-link to="/login" v-if="!authenticated"> Login </router-link>
-		<a v-if="authenticated" v-on:click="logout()"> Logout </a>
-	</div>
-	<router-view />
+	<n-config-provider :theme="darkTheme">
+		<nav>
+			<app-bar :user="user" :logout="logout"></app-bar>
+		</nav>
+		<router-view />
+	</n-config-provider>
 </template>
 
 <script>
+import { NConfigProvider, darkTheme } from 'naive-ui';
+import AppBar from '@/components/appBar';
+import OrdersController from '@/controllers/OrdersController';
+
 export default {
 	name: 'app',
 	data: function () {
-		return { authenticated: false };
+		return {
+			authenticated: false,
+			user: null,
+			logout: () => this.$auth.signOut(),
+		};
+	},
+	components: {
+		AppBar,
+		NConfigProvider,
+	},
+	setup() {
+		return {
+			darkTheme,
+		};
 	},
 	async created() {
 		await this.isAuthenticated();
 		this.$auth.authStateManager.subscribe(this.isAuthenticated);
+
+		if (this.authenticated) {
+			this.user = await this.$auth.getUser();
+			let token = this.$auth.getAccessToken();
+
+			let user = await OrdersController.getUser(token, this.user.email);
+
+			Object.assign(this.user, user);
+		}
 	},
 	watch: {
 		// Everytime the route changes, check for auth status
@@ -25,32 +51,19 @@ export default {
 		async isAuthenticated() {
 			this.authenticated = await this.$auth.isAuthenticated();
 		},
-		async logout() {
-			await this.$auth.signOut();
-		},
 	},
 };
 </script>
 
 <style>
-#app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
+body {
+	background-color: #131315;
+	color: white;
+	padding: 0 20px 20px 20px;
 }
 
-#nav {
-	padding: 30px;
-}
-
-#nav a {
-	font-weight: bold;
-	color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-	color: #42b983;
+nav {
+	display: flex;
+	justify-content: center;
 }
 </style>
