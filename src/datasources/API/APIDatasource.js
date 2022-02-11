@@ -12,6 +12,7 @@ export default class APIDatasource {
 			return response.data;
 		} catch (error) {
 			console.info('URl could not be accessed');
+			console.info(error);
 			return null;
 		}
 	}
@@ -27,7 +28,8 @@ export default class APIDatasource {
 
 			return response.data;
 		} catch (error) {
-			console.info('URl could not be accessed');
+			console.info(url + ' could not be accessed');
+			console.info(error);
 			return null;
 		}
 	}

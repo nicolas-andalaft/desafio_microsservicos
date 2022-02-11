@@ -11,7 +11,6 @@
 
 <script>
 import { NCard } from 'naive-ui';
-//import DateFormat from '@/helpers/DateFormat';
 
 export default {
 	props: {

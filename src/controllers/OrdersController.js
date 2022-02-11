@@ -16,4 +16,11 @@ export default class OrdersController {
 	static async getUserOrders(accessToken, user) {
 		return await OrdersController.datasource.getUserOrders(accessToken, user);
 	}
+
+	static async getUserStocksBalance(accessToken, user) {
+		return await OrdersController.datasource.getUserStocksBalance(
+			accessToken,
+			user
+		);
+	}
 }
