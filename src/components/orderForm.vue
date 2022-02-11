@@ -33,8 +33,19 @@
 			</n-form-item>
 
 			<p>{{ model.volume * model.price }}</p>
-			<n-button @click="validate" :loading="loading" type="primary" size="large"
+			<n-button
+				@click="validate0"
+				:loading="loading"
+				type="primary"
+				size="large"
 				>Buy</n-button
+			>
+			<n-button
+				@click="validate1"
+				:loading="loading"
+				type="primary"
+				size="large"
+				>Sell</n-button
 			>
 		</n-form>
 	</div>
@@ -91,7 +102,8 @@ export default {
 					},
 				},
 			},
-			validate(e) {
+
+			validate(e, type) {
 				e.preventDefault();
 				formRef.value
 					.validate(async (errors) => {
@@ -104,7 +116,7 @@ export default {
 						order.id_stock = formRef.value.model.stock_id;
 						order.volume = formRef.value.model.volume;
 						order.price = formRef.value.model.price;
-						order.type = 0;
+						order.type = type;
 						await OrdersController.newOrder(accessToken.accessToken, order);
 
 						if (props.onValid) props.onValid();
@@ -123,6 +135,14 @@ export default {
 				};
 			});
 		}
+	},
+	methods: {
+		validate0(e) {
+			this.validate(e, 0);
+		},
+		validate1(e) {
+			this.validate(e, 1);
+		},
 	},
 };
 </script>
