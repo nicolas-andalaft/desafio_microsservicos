@@ -6,14 +6,14 @@
 			mode="horizontal"
 		></n-menu>
 		<n-menu
-			v-if="authenticated === true"
+			v-if="user !== null"
 			:options="authMenu"
 			v-model:value="activeKey"
 			mode="horizontal"
 			class="authMenu"
 		></n-menu>
 		<n-menu
-			v-if="authenticated === false"
+			v-if="user === null"
 			:options="noAuthMenu"
 			v-model:value="activeKey"
 			mode="horizontal"
@@ -31,32 +31,38 @@ function renderIcon(icon) {
 }
 
 export default {
-	props: {
-		authenticated: {
-			type: Boolean,
-		},
-		user: {},
-		logout: null,
-	},
 	components: {
 		NMenu,
 	},
-	setup(props) {
-		let activeKey = 'home';
-		const defaultMenu = [
+	this: {
+		logout: null,
+	},
+	data() {
+		return {
+			user: null,
+			activeKey: 'home',
+			defaultMenu: [],
+			noAuthMenu: [],
+			authMenu: [],
+		};
+	},
+	beforeMount() {
+		this.user = this.$store.state.user;
+
+		this.defaultMenu = [
 			{
 				label: () => h('a', { href: '/', class: 'grow' }, 'Home'),
 				key: 'home',
 			},
 		];
-		const noAuthMenu = [
+		this.noAuthMenu = [
 			{
 				label: () => h('a', { href: '/login' }, 'Login'),
 				key: 'login',
 				icon: renderIcon(MdContact),
 			},
 		];
-		const authMenu = [
+		this.authMenu = [
 			{
 				label: () => h('a', { href: '/profile' }, 'Profile'),
 				key: 'profile',
@@ -66,31 +72,24 @@ export default {
 					h(
 						'a',
 						{},
-						props.user?.dollar_balance ? 'U$ ' + props.user?.dollar_balance : ''
+						this.user?.dollar_balance ? 'U$ ' + this.user?.dollar_balance : ''
 					),
 				icon: renderIcon(MdCash),
 				key: 'balance',
 			},
 			{
-				label: () => h('a', {}, props.user?.name),
+				label: () => h('a', {}, this.user?.name),
 				key: 'username',
 				icon: renderIcon(MdPerson),
 				children: [
 					{
-						label: () => h('a', { onclick: props.logout }, 'Logout'),
+						label: () => h('a', { onclick: this.logout }, 'Logout'),
 						icon: renderIcon(MdExit),
 						key: 'logout',
 					},
 				],
 			},
 		];
-
-		return {
-			activeKey,
-			defaultMenu,
-			noAuthMenu,
-			authMenu,
-		};
 	},
 };
 </script>

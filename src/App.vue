@@ -1,49 +1,45 @@
 <template>
 	<n-config-provider :theme="darkTheme">
-		<app-bar
-			:authenticated="authenticated"
-			:user="user"
-			:logout="logout"
-			class="nav"
-		/>
-		<router-view />
+		<app-bar :authenticated="authenticated" :logout="logout" class="nav" />
+		<n-dialog-provider><router-view /></n-dialog-provider>
 	</n-config-provider>
 </template>
 
 <script>
-import { NConfigProvider, darkTheme } from 'naive-ui';
+import { NConfigProvider, darkTheme, NDialogProvider } from 'naive-ui';
 import AppBar from '@/components/appBar';
 import OrdersController from '@/controllers/OrdersController';
 
 export default {
-	name: 'app',
 	data: function () {
 		return {
 			authenticated: false,
-			user: null,
 			logout: () => this.$auth.signOut(),
 		};
 	},
 	components: {
 		AppBar,
 		NConfigProvider,
+		NDialogProvider,
 	},
 	setup() {
 		return {
 			darkTheme,
 		};
 	},
-	async created() {
+	async beforeMount() {
 		await this.isAuthenticated();
 		this.$auth.authStateManager.subscribe(this.isAuthenticated);
 
 		if (this.authenticated) {
-			this.user = await this.$auth.getUser();
 			let token = this.$auth.getAccessToken();
+			this.$store.state.accessToken = token;
 
-			let user = await OrdersController.getUser(token, this.user.email);
+			let user = await this.$auth.getUser();
+			let userResp = await OrdersController.getUser(token, user.email);
 
-			Object.assign(this.user, user);
+			Object.assign(user, userResp);
+			this.$store.state.user = user;
 		}
 	},
 	watch: {
