@@ -53,10 +53,6 @@ export default {
 	methods: {
 		async isAuthenticated() {
 			this.authenticated = await this.$auth.isAuthenticated();
-			console.log(
-				'🚀 ~ file: App.vue ~ line 57 ~ isAuthenticated ~ this.authenticated',
-				this.authenticated
-			);
 		},
 	},
 };
