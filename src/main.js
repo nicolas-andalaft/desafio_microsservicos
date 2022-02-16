@@ -15,6 +15,7 @@ new StocksController(new StocksAPI());
 const store = createStore({
 	state() {
 		return {
+			authenticated: false,
 			accessToken: '',
 			user: {},
 		};
@@ -29,7 +30,7 @@ createApp(App)
 			router.push('/login');
 		},
 		onAuthResume: () => {
-			router.push('/login');
+			router.push('/');
 		},
 	})
 	.use(store)
