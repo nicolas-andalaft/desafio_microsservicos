@@ -28,4 +28,10 @@ export default class OrdersAPI {
 			order: order,
 		});
 	}
+
+	async switchUserOrder(accessToken, order) {
+		let endpoint = `/orders/${order.id}/switch`;
+
+		return await APIDatasource.get(this.baseUrl + endpoint, accessToken);
+	}
 }

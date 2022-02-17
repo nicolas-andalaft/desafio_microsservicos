@@ -6,6 +6,6 @@ export default class StocksAPI {
 	async getStocks(accessToken) {
 		let endpoint = '/stocks';
 
-		return APIDatasource.get(this.baseUrl + endpoint, accessToken);
+		return await APIDatasource.get(this.baseUrl + endpoint, accessToken);
 	}
 }
