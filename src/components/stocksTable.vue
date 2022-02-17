@@ -96,9 +96,3 @@ export default {
 	},
 };
 </script>
-
-<style>
-.smallTable {
-	font-size: 0.8rem;
-}
-</style>

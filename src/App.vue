@@ -1,7 +1,11 @@
 <template>
 	<n-config-provider :theme="darkTheme">
 		<app-bar ref="appBar" class="nav" />
-		<n-dialog-provider><router-view /></n-dialog-provider>
+		<n-dialog-provider>
+			<div class="content">
+				<router-view />
+			</div>
+		</n-dialog-provider>
 	</n-config-provider>
 </template>
 
@@ -54,14 +58,3 @@ export default {
 	},
 };
 </script>
-
-<style>
-body {
-	background-color: #131315;
-	color: white;
-	padding: 0 20px 20px 20px;
-}
-.n-data-table-td {
-	word-break: break-word;
-}
-</style>

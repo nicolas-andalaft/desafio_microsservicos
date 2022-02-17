@@ -8,6 +8,7 @@ import OrdersAPI from '@/datasources/API/OrdersAPI';
 import StocksAPI from '@/datasources/API/StocksAPI';
 import OrdersController from '@/controllers/OrdersController';
 import StocksController from '@/controllers/StocksController';
+import '@/assets/stylesheet.css';
 
 new OrdersController(new OrdersAPI());
 new StocksController(new StocksAPI());

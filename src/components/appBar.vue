@@ -90,18 +90,3 @@ export default {
 	},
 };
 </script>
-
-<style>
-nav {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	height: 4rem;
-}
-.authMenu {
-	display: contents !important;
-}
-.authMenu :nth-child(1) {
-	margin-right: auto !important;
-}
-</style>

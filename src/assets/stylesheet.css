@@ -1,0 +1,66 @@
+/* Tags */
+
+body {
+	background-color: #131315;
+	color: white;
+	padding: 0 20px 20px 20px;
+}
+
+nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 4rem;
+}
+
+/* Classes */
+
+.content {
+	padding: 0 20px;
+}
+
+.m-10 {
+	margin: 10px;
+}
+
+.smallTable {
+	font-size: 0.8rem;
+}
+
+.authMenu {
+	display: contents !important;
+}
+
+.authMenu :nth-child(1) {
+	margin-right: auto !important;
+}
+
+.card-info {
+	margin: 0;
+}
+
+.item-card {
+	min-width: 280px;
+}
+
+.tag-label {
+	margin-top: 1.5rem;
+}
+
+.tag-label p {
+	position: absolute;
+	margin: 0;
+	top: -1.3rem;
+	left: 0;
+	font-size: 0.8rem;
+}
+
+/* Naive UI Override */
+
+.n-data-table-td {
+	word-break: break-word;
+}
+
+.item-card .n-card__content {
+	padding-top: 10px !important;
+}

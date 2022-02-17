@@ -40,9 +40,3 @@ export default {
 	},
 };
 </script>
-
-<style scoped>
-.d-flex {
-	display: flex;
-}
-</style>
