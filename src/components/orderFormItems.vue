@@ -77,8 +77,8 @@ export default {
 		const formRef = ref(null);
 		const formModel = ref({
 			stock_id: null,
-			price: null,
-			volume: null,
+			price: 1.0,
+			volume: 10,
 		});
 
 		const validate = function (e) {
@@ -137,11 +137,7 @@ export default {
 			});
 		},
 		setDefaultStock(stock) {
-			this.model = stock;
-			console.log(
-				'🚀 ~ file: orderFormItems.vue ~ line 142 ~ setDefaultStock ~ this.model',
-				this.model
-			);
+			this.model.id = stock.id;
 		},
 	},
 };
