@@ -23,8 +23,23 @@ nav {
 	margin: 10px;
 }
 
-.smallTable {
+.w-100 {
+	width: 100%;
+}
+
+.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.vertical {
+	flex-direction: column;
+}
+
+.small-txt {
 	font-size: 0.8rem;
+	margin: 0;
 }
 
 .authMenu {
@@ -55,6 +70,11 @@ nav {
 	font-size: 0.8rem;
 }
 
+.small-form {
+	flex-grow: 1;
+	max-width: 500px;
+}
+
 /* Naive UI Override */
 
 .n-data-table-td {
@@ -63,4 +83,10 @@ nav {
 
 .item-card .n-card__content {
 	padding-top: 10px !important;
+}
+
+.n-form {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
 }

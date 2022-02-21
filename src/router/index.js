@@ -3,6 +3,7 @@ import { LoginCallback, navigationGuard } from '@okta/okta-vue';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
 import Profile from '@/views/Profile';
+import OrderForm from '@/views/OrderForm';
 
 const routes = [
 	{
@@ -21,6 +22,17 @@ const routes = [
 	{
 		path: '/profile',
 		component: Profile,
+		meta: {
+			requiresAuth: true,
+		},
+	},
+	{
+		name: 'orderForm',
+		path: '/createorder',
+		component: OrderForm,
+		defineProps: {
+			type: Number,
+		},
 		meta: {
 			requiresAuth: true,
 		},
