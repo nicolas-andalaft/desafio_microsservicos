@@ -66,6 +66,7 @@ export default {
 				name: 'orderForm',
 				params: {
 					type: 0,
+					id_stock: this.$props.stock.id,
 				},
 			});
 		},

@@ -1,10 +1,10 @@
 <template>
 	<n-form :model="model" :rules="rules" ref="formRef">
-		<n-form-item label="Stock" path="stock_id">
+		<n-form-item label="Stock" path="id">
 			<n-select
-				placeholder="Type the desired stock"
+				placeholder="Choose stock"
 				:options="stocksList"
-				v-model:value="model.stock_id"
+				v-model:value="model.id"
 				filterable
 			>
 			</n-select>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, h } from 'vue';
 import {
 	NForm,
 	NFormItem,
@@ -53,6 +53,7 @@ import {
 	NSelect,
 	NButton,
 	NH1,
+	NTag,
 } from 'naive-ui';
 
 export default {
@@ -88,7 +89,7 @@ export default {
 
 					let order = {};
 
-					order.id_stock = formRef.value.model.stock_id;
+					order.id_stock = formRef.value.model.id;
 					order.volume = formRef.value.model.volume;
 					order.price = formRef.value.model.price;
 
@@ -97,12 +98,17 @@ export default {
 				.catch(() => {});
 		};
 
+		const renderStockTitle = ({ option }) => {
+			return h(NTag, {}, { default: () => option.label });
+		};
+
 		return {
 			validate,
 			formRef,
 			model: formModel,
+			renderStockTitle,
 			rules: {
-				stock_id: {
+				id: {
 					required: true,
 					message: 'Enter a valid stock',
 				},
@@ -122,12 +128,20 @@ export default {
 	},
 	methods: {
 		updateStocks(stocks) {
+			if (stocks.length < 1) return;
 			this.stocksList = stocks.map((stock) => {
 				return {
 					label: stock.stock_name + ' - ' + stock.stock_symbol,
 					value: stock.id,
 				};
 			});
+		},
+		setDefaultStock(stock) {
+			this.model = stock;
+			console.log(
+				'🚀 ~ file: orderFormItems.vue ~ line 142 ~ setDefaultStock ~ this.model',
+				this.model
+			);
 		},
 	},
 };

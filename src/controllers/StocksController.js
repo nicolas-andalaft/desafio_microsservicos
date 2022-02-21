@@ -8,4 +8,10 @@ export default class StocksController {
 	static async getStocks(accessToken) {
 		return await StocksController.datasource.getStocks(accessToken);
 	}
+
+	static async getStock(accessToken, id) {
+		if (id === null) return {};
+
+		return await StocksController.datasource.getStock(accessToken, id);
+	}
 }

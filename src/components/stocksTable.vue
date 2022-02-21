@@ -4,6 +4,7 @@
 			:columns="columns"
 			:data="stocksList"
 			:single-line="false"
+			:row-props="rowProps"
 			:pagination="pagination"
 			class="smallTable"
 		/>
@@ -20,12 +21,13 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		onStockSelect: Function,
 	},
 	components: {
 		NDataTable,
 		NSpin,
 	},
-	setup() {
+	setup(props) {
 		let columns = [
 			{
 				title: 'Stock',
@@ -83,7 +85,14 @@ export default {
 			},
 		];
 
-		let pagination = reactive({
+		const rowProps = (row) => {
+			return {
+				style: 'cursor: pointer;',
+				onClick: () => props.onStockSelect(row),
+			};
+		};
+
+		const pagination = reactive({
 			page: 1,
 			pageSize: 50,
 			onChange: (page) => (pagination.page = page),
@@ -91,6 +100,7 @@ export default {
 
 		return {
 			columns,
+			rowProps,
 			pagination,
 		};
 	},
