@@ -39,10 +39,14 @@ export default {
 				{ name: 'max', values: val_max },
 			];
 
-			this.labels = dataList.map((e) => e.created_on.substring(0, 1));
+			this.labels = dataList.map((e) => this.getDate(e.created_on));
 		},
 		getValue(value) {
-			return (value == null ? 0 : value).toFixed(2);
+			return (value ?? 0).toFixed(2);
+		},
+		getDate(date) {
+			let value = new Date(date);
+			return value.toLocaleDateString(navigator.languages[0]);
 		},
 	},
 };
