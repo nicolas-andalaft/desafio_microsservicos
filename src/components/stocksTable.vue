@@ -61,11 +61,17 @@ export default {
 				children: [
 					{
 						title: 'Min',
-						key: 'ask_min',
+						align: 'center',
+						render(row) {
+							return h('p', {}, row.ask_min.toFixed(2));
+						},
 					},
 					{
 						title: 'Max',
-						key: 'ask_max',
+						align: 'center',
+						render(row) {
+							return h('p', {}, row.ask_max.toFixed(2));
+						},
 					},
 				],
 			},
@@ -75,11 +81,17 @@ export default {
 				children: [
 					{
 						title: 'Min',
-						key: 'bid_min',
+						align: 'center',
+						render(row) {
+							return h('p', {}, row.bid_min.toFixed(2));
+						},
 					},
 					{
 						title: 'Max',
-						key: 'bid_max',
+						align: 'center',
+						render(row) {
+							return h('p', {}, row.bid_max.toFixed(2));
+						},
 					},
 				],
 			},

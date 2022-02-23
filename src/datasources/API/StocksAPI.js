@@ -14,4 +14,10 @@ export default class StocksAPI {
 
 		return await APIDatasource.get(this.baseUrl + endpoint, accessToken);
 	}
+
+	async getStockHistory(accessToken, id) {
+		let endpoint = '/stocks/' + id + '/history';
+
+		return await APIDatasource.get(this.baseUrl + endpoint, accessToken);
+	}
 }

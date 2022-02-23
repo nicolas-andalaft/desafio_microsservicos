@@ -37,6 +37,10 @@ nav {
 	flex-direction: column;
 }
 
+.container {
+	margin: 0 20px;
+}
+
 .small-txt {
 	font-size: 0.8rem;
 	margin: 0;
