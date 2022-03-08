@@ -29,6 +29,7 @@ import StockChart from '@/components/stockChart';
 import StocksController from '@/controllers/StocksController';
 import StocksTable from '@/components/stocksTable';
 import router from '@/router/index';
+import SocketClient from '@/datasources/SocketClient';
 
 export default {
 	components: {
@@ -49,6 +50,7 @@ export default {
 	async created() {
 		this.accessToken = this.$auth.getAccessToken();
 
+		new SocketClient(this.updateStocks);
 		this.updateStocks();
 	},
 	methods: {
