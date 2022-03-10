@@ -1,11 +1,11 @@
 <template>
 	<div class="home">
-		<n-grid cols="1 m:2" responsive="screen">
-			<n-grid-item>
+		<n-grid cols="12" item-responsive responsive="screen">
+			<n-grid-item span="12 m:8 xl:6">
 				<stocks-table :stocksList="stocksList" :onStockSelect="onStockSelect">
 				</stocks-table>
 			</n-grid-item>
-			<n-grid-item v-if="currentStock.id != null">
+			<n-grid-item v-if="currentStock.id != null" span="0 m:4 xl:6">
 				<n-anchor :top="0" :show-rail="false" affix class="container">
 					<h1>
 						{{ currentStock.stock_name }} - {{ currentStock.stock_symbol }}
@@ -66,8 +66,8 @@ export default {
 
 			StocksController.getStockHistory(this.accessToken, selected.id).then(
 				(list) => {
-					this.$refs.askChart.updateData(list);
-					this.$refs.bidChart.updateData(list);
+					this.$refs.askChart?.updateData(list);
+					this.$refs.bidChart?.updateData(list);
 				}
 			);
 		},

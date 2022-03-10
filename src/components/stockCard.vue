@@ -65,8 +65,8 @@ export default {
 			router.push({
 				name: 'orderForm',
 				params: {
-					type: 0,
-					id_stock: this.$props.stock.id,
+					type: 1,
+					id_stock: this.$props.stock.id_stock,
 				},
 			});
 		},

@@ -16,7 +16,9 @@ nav {
 /* Classes */
 
 .content {
+	max-width: 2200px;
 	padding: 0 20px;
+	margin: 0 auto;
 }
 
 .m-10 {
@@ -33,10 +35,6 @@ nav {
 	align-items: center;
 }
 
-.vertical {
-	flex-direction: column;
-}
-
 .container {
 	margin: 0 20px;
 }
@@ -44,6 +42,10 @@ nav {
 .small-txt {
 	font-size: 0.8rem;
 	margin: 0;
+}
+
+.r-90 {
+	transform: rotate(90deg);
 }
 
 .authMenu {
@@ -56,10 +58,6 @@ nav {
 
 .card-info {
 	margin: 0;
-}
-
-.item-card {
-	min-width: 280px;
 }
 
 .tag-label {
@@ -79,10 +77,24 @@ nav {
 	max-width: 500px;
 }
 
+.title-input .n-base-selection {
+	--n-color: transparent !important;
+	padding: 10px 0;
+}
+
+.title-input .n-base-selection-overlay {
+	font-size: 1.4rem;
+	font-weight: bold;
+}
+
 /* Naive UI Override */
 
 .n-data-table-td {
 	word-break: break-word;
+}
+
+.n-data-table-td span {
+	word-break: keep-all;
 }
 
 .item-card .n-card__content {
@@ -93,4 +105,8 @@ nav {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
+}
+
+.n-base-selection-input {
+	cursor: text !important;
 }

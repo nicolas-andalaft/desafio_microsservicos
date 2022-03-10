@@ -1,7 +1,7 @@
 <template>
 	<div class="center">
 		<n-card
-			:title="'Create ' + (type === 0 ? 'Buy' : 'Sell') + ' Order'"
+			:title="'Create ' + (type == 0 ? 'Buy' : 'Sell') + ' Order'"
 			@close="routeBack"
 			class="small-form"
 			closable

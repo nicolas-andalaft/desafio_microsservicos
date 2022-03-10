@@ -16,7 +16,6 @@ new StocksController(new StocksAPI());
 const store = createStore({
 	state() {
 		return {
-			authenticated: false,
 			accessToken: '',
 			user: {},
 		};

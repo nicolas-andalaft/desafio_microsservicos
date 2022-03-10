@@ -6,7 +6,11 @@
 				:options="stocksList"
 				v-model:value="model.id"
 				filterable
+				class="title-input"
 			>
+				<template #arrow>
+					<md-swap class="r-90" />
+				</template>
 			</n-select>
 		</n-form-item>
 
@@ -55,6 +59,7 @@ import {
 	NH1,
 	NTag,
 } from 'naive-ui';
+import { MdSwap } from '@vicons/ionicons4';
 
 export default {
 	components: {
@@ -64,6 +69,7 @@ export default {
 		NSelect,
 		NButton,
 		NH1,
+		MdSwap,
 	},
 	props: {
 		onValid: Function,

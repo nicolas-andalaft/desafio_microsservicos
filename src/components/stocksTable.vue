@@ -28,6 +28,8 @@ export default {
 		NSpin,
 	},
 	setup(props) {
+		var formatNumber = (number) => (number !== null ? number.toFixed(2) : null);
+
 		let columns = [
 			{
 				title: 'Stock',
@@ -63,14 +65,14 @@ export default {
 						title: 'Min',
 						align: 'center',
 						render(row) {
-							return h('p', {}, row.ask_min.toFixed(2));
+							return h('span', {}, formatNumber(row.ask_min));
 						},
 					},
 					{
 						title: 'Max',
 						align: 'center',
 						render(row) {
-							return h('p', {}, row.ask_max.toFixed(2));
+							return h('span', {}, formatNumber(row.ask_max));
 						},
 					},
 				],
@@ -83,14 +85,14 @@ export default {
 						title: 'Min',
 						align: 'center',
 						render(row) {
-							return h('p', {}, row.bid_min.toFixed(2));
+							return h('span', {}, formatNumber(row.bid_min));
 						},
 					},
 					{
 						title: 'Max',
 						align: 'center',
 						render(row) {
-							return h('p', {}, row.bid_max.toFixed(2));
+							return h('span', {}, formatNumber(row.bid_max));
 						},
 					},
 				],
