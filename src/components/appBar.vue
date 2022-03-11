@@ -1,91 +1,99 @@
 <template>
 	<nav>
-		<n-menu :options="defaultMenu" mode="horizontal"></n-menu>
-		<n-menu
-			v-if="authenticated === true"
-			:options="authMenu"
-			mode="horizontal"
-			class="authMenu"
-		></n-menu>
-		<n-menu v-else :options="noAuthMenu" mode="horizontal"></n-menu>
+		<n-space class="nav-items">
+			<n-button text @click="this.push('/')">Home</n-button>
+		</n-space>
+
+		<n-space v-if="authenticated === true" class="authMenu nav-items">
+			<n-button text @click="this.push('/profile')">Profile</n-button>
+
+			<n-popover :show-arrow="false">
+				<template #trigger>
+					<n-button text>
+						<template #icon>
+							<n-icon><MdNotifications /></n-icon>
+						</template>
+					</n-button>
+				</template>
+				<n-space vertical> </n-space>
+			</n-popover>
+
+			<n-button text>
+				<template #icon>
+					<n-icon><MdCash /></n-icon>
+				</template>
+				{{ this.user?.dollar_balance ? 'U$ ' + this.user?.dollar_balance : '' }}
+			</n-button>
+
+			<n-popover :show-arrow="false">
+				<template #trigger>
+					<n-button text>
+						<template #icon>
+							<n-icon><MdPerson /></n-icon>
+						</template>
+						{{ this.user?.name }}
+					</n-button>
+				</template>
+				<n-button text @click="logout">
+					<template #icon>
+						<n-icon><MdExit /></n-icon>
+					</template>
+					Log Out
+				</n-button>
+			</n-popover>
+		</n-space>
+
+		<n-space v-if="authenticated === false" class="nav-items">
+			<n-button text @click="push('/login')">
+				<template #icon>
+					<n-icon><MdContact /></n-icon>
+				</template>
+				Login
+			</n-button>
+		</n-space>
 	</nav>
 </template>
 
 <script>
-import { h } from 'vue';
-import { NIcon, NMenu } from 'naive-ui';
-import { MdPerson, MdCash, MdExit, MdContact } from '@vicons/ionicons4';
-import { RouterLink } from 'vue-router';
-
-function renderIcon(icon) {
-	return () => h(NIcon, null, { default: () => h(icon) });
-}
+import { NIcon, NPopover, NButton } from 'naive-ui';
+import {
+	MdPerson,
+	MdCash,
+	MdExit,
+	MdContact,
+	MdNotifications,
+} from '@vicons/ionicons4';
 
 export default {
 	components: {
-		NMenu,
+		NPopover,
+		NButton,
+		NIcon,
+		MdPerson,
+		MdCash,
+		MdExit,
+		MdContact,
+		MdNotifications,
 	},
 	data() {
 		return {
 			authenticated: false,
 			user: {},
 			activeKey: '',
-			defaultMenu: [],
 			noAuthMenu: [],
 			authMenu: [],
 		};
-	},
-	beforeMount() {
-		let logout = () => this.$auth.signOut();
-
-		this.defaultMenu = [
-			{
-				label: () => h(RouterLink, { to: '/' }, { default: () => 'Home' }),
-				key: 'home',
-			},
-		];
-		this.noAuthMenu = [
-			{
-				label: () =>
-					h(RouterLink, { to: '/login' }, { default: () => 'Login' }),
-				key: 'login',
-				icon: renderIcon(MdContact),
-			},
-		];
-		this.authMenu = [
-			{
-				label: () =>
-					h(RouterLink, { to: '/profile' }, { default: () => 'Profile' }),
-				key: 'profile',
-			},
-			{
-				label: () =>
-					h(
-						'a',
-						{},
-						this.user?.dollar_balance ? 'U$ ' + this.user?.dollar_balance : ''
-					),
-				icon: renderIcon(MdCash),
-				key: 'balance',
-			},
-			{
-				label: () => h('a', {}, this.user?.name),
-				key: 'username',
-				icon: renderIcon(MdPerson),
-				children: [
-					{
-						label: () => h('a', { onclick: logout }, 'Logout'),
-						icon: renderIcon(MdExit),
-						key: 'logout',
-					},
-				],
-			},
-		];
 	},
 	methods: {
 		updateData(user, authenticated) {
 			this.user = user;
 			this.authenticated = authenticated;
+		},
+		logout() {
+			this.$auth.signOut();
+		},
+		push(path) {
+			this.$router.push(path);
 		},
 	},
 };

@@ -35,6 +35,10 @@ nav {
 	align-items: center;
 }
 
+.nav-items > * {
+	padding: 0 12px;
+}
+
 .container {
 	margin: 0 20px;
 }
@@ -109,4 +113,8 @@ nav {
 
 .n-base-selection-input {
 	cursor: text !important;
+}
+
+.n-button__icon {
+	padding-right: 8px;
 }
