@@ -40,4 +40,24 @@ export default class OrdersController {
 			order
 		);
 	}
+
+	static async getUserOrdersHistory(accessToken, user, status) {
+		if (typeof user.id === 'undefined') return null;
+		if (status == null) status = '-1';
+
+		return await OrdersController.datasource.getUserOrdersHistory(
+			accessToken,
+			user,
+			status
+		);
+	}
+
+	static async disableUserOrderHistory(accessToken, order) {
+		if (typeof order.id === 'undefined') return null;
+
+		return await OrdersController.datasource.disableUserOrderHistory(
+			accessToken,
+			order
+		);
+	}
 }

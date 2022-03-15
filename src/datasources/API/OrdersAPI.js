@@ -34,4 +34,16 @@ export default class OrdersAPI {
 
 		return await APIDatasource.get(this.baseUrl + endpoint, accessToken);
 	}
+
+	async getUserOrdersHistory(accessToken, user, status) {
+		let endpoint = `/user/${user.id}/orders/history/${status}`;
+
+		return await APIDatasource.get(this.baseUrl + endpoint, accessToken);
+	}
+
+	async disableUserOrderHistory(accessToken, order) {
+		let endpoint = `/orders/history/${order.id}/switch`;
+
+		return await APIDatasource.get(this.baseUrl + endpoint, accessToken);
+	}
 }
