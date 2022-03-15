@@ -7,15 +7,20 @@
 		<n-space v-if="authenticated === true" class="authMenu nav-items">
 			<n-button text @click="this.push('/profile')">Profile</n-button>
 
-			<n-popover :show-arrow="false">
+			<n-popover :show-arrow="false" :raw="notifications.length == 0">
 				<template #trigger>
 					<n-button text>
 						<template #icon>
-							<n-icon><MdNotifications /></n-icon>
+							<n-badge :value="notifications.length" :max="99">
+								<n-icon color="white"><MdNotifications /></n-icon>
+							</n-badge>
 						</template>
 					</n-button>
 				</template>
-				<n-space vertical> </n-space>
+				<notifications-menu
+					:notifications="notifications"
+					:onClose="closeNotif"
+				/>
 			</n-popover>
 
 			<n-button text>
@@ -55,7 +60,7 @@
 </template>
 
 <script>
-import { NIcon, NPopover, NButton } from 'naive-ui';
+import { NIcon, NPopover, NButton, NBadge, NSpace } from 'naive-ui';
 import {
 	MdPerson,
 	MdCash,
@@ -63,17 +68,22 @@ import {
 	MdContact,
 	MdNotifications,
 } from '@vicons/ionicons4';
+import NotificationsMenu from '@/components/notificationsMenu';
+import OrdersController from '@/controllers/OrdersController';
 
 export default {
 	components: {
 		NPopover,
 		NButton,
 		NIcon,
+		NBadge,
+		NSpace,
 		MdPerson,
 		MdCash,
 		MdExit,
 		MdContact,
 		MdNotifications,
+		NotificationsMenu,
 	},
 	data() {
 		return {
@@ -82,18 +92,36 @@ export default {
 			activeKey: '',
 			noAuthMenu: [],
 			authMenu: [],
+			notifications: [],
+		};
+	},
+	setup() {
+		return {
+			OrdersController,
 		};
 	},
 	methods: {
 		updateData(user, authenticated) {
 			this.user = user;
 			this.authenticated = authenticated;
+
+			this.OrdersController.getUserOrdersHistory(
+				this.$store.state.accessToken,
+				this.user,
+				'1'
+			).then((result) => (this.notifications = result));
 		},
 		logout() {
 			this.$auth.signOut();
 		},
 		push(path) {
 			this.$router.push(path);
+		},
+		closeNotif(index) {
+			OrdersController.disableUserOrderHistory(
+				this.$store.state.accessToken,
+				this.notifications[index]
+			).then(() => this.notifications.splice(index, 1));
 		},
 	},
 };
