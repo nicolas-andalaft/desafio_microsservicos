@@ -1,61 +1,55 @@
 export default class OrdersController {
 	static datasource;
 
-	constructor(datasource) {
+	static initialize(datasource) {
 		if (!OrdersController.datasource) OrdersController.datasource = datasource;
 	}
 
-	static async getUser(accessToken, email) {
-		return await OrdersController.datasource.getUser(accessToken, email);
+	static getUser(accessToken, email) {
+		return OrdersController.datasource.getUser(accessToken, email);
 	}
 
-	static async newOrder(accessToken, order) {
-		return await OrdersController.datasource.newOrder(accessToken, order);
+	static newOrder(accessToken, order) {
+		return OrdersController.datasource.newOrder(accessToken, order);
 	}
 
-	static async getUserOrders(accessToken, user) {
+	static getUserOrders(accessToken, user) {
 		if (typeof user.id === 'undefined') return [];
 
-		return await OrdersController.datasource.getUserOrders(accessToken, user);
+		return OrdersController.datasource.getUserOrders(accessToken, user);
 	}
 
-	static async getUserStocksBalance(accessToken, user) {
+	static getUserStocksBalance(accessToken, user) {
 		if (typeof user.id === 'undefined') return [];
 
-		return await OrdersController.datasource.getUserStocksBalance(
-			accessToken,
-			user
-		);
+		return OrdersController.datasource.getUserStocksBalance(accessToken, user);
 	}
 
-	static async switchUserOrder(accessToken, order) {
+	static switchUserOrder(accessToken, order) {
 		if (
 			typeof order.id_user === 'undefined' ||
 			typeof order.id_stock === 'undefined'
 		)
 			return null;
 
-		return await OrdersController.datasource.switchUserOrder(
-			accessToken,
-			order
-		);
+		return OrdersController.datasource.switchUserOrder(accessToken, order);
 	}
 
-	static async getUserOrdersHistory(accessToken, user, status) {
+	static getUserOrdersHistory(accessToken, user, status) {
 		if (typeof user.id === 'undefined') return null;
 		if (status == null) status = '-1';
 
-		return await OrdersController.datasource.getUserOrdersHistory(
+		return OrdersController.datasource.getUserOrdersHistory(
 			accessToken,
 			user,
 			status
 		);
 	}
 
-	static async disableUserOrderHistory(accessToken, order) {
+	static disableUserOrderHistory(accessToken, order) {
 		if (typeof order.id === 'undefined') return null;
 
-		return await OrdersController.datasource.disableUserOrderHistory(
+		return OrdersController.datasource.disableUserOrderHistory(
 			accessToken,
 			order
 		);

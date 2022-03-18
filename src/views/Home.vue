@@ -50,7 +50,7 @@ export default {
 	async created() {
 		this.accessToken = this.$auth.getAccessToken();
 
-		new SocketClient(this.updateStocks);
+		SocketClient.listen(this.updateStocks);
 		this.updateStocks();
 	},
 	methods: {

@@ -10,8 +10,8 @@ import OrdersController from '@/controllers/OrdersController';
 import StocksController from '@/controllers/StocksController';
 import '@/assets/stylesheet.css';
 
-new OrdersController(new OrdersAPI());
-new StocksController(new StocksAPI());
+OrdersController.initialize(new OrdersAPI());
+StocksController.initialize(new StocksAPI());
 
 const store = createStore({
 	state() {

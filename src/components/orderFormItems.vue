@@ -101,7 +101,7 @@ export default {
 
 					if (props.onValid) props.onValid(order);
 				})
-				.catch(() => {});
+				.catch();
 		};
 
 		const renderStockTitle = ({ option }) => {

@@ -1,23 +1,23 @@
 export default class StocksController {
 	static datasource;
 
-	constructor(datasource) {
+	static initialize(datasource) {
 		if (!StocksController.datasource) StocksController.datasource = datasource;
 	}
 
-	static async getStocks(accessToken) {
-		return await StocksController.datasource.getStocks(accessToken);
+	static getStocks(accessToken) {
+		return StocksController.datasource.getStocks(accessToken);
 	}
 
-	static async getStock(accessToken, id) {
+	static getStock(accessToken, id) {
 		if (id === null) return {};
 
-		return await StocksController.datasource.getStock(accessToken, id);
+		return StocksController.datasource.getStock(accessToken, id);
 	}
 
-	static async getStockHistory(accessToken, id) {
+	static getStockHistory(accessToken, id) {
 		if (id === null) return {};
 
-		return await StocksController.datasource.getStockHistory(accessToken, id);
+		return StocksController.datasource.getStockHistory(accessToken, id);
 	}
 }

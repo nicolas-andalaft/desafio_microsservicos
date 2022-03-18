@@ -32,7 +32,7 @@ export default {
 	props: {
 		onClose: {
 			type: Function,
-			default: () => {},
+			default: null,
 		},
 		notifications: {
 			type: Array,
