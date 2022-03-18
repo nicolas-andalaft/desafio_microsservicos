@@ -1,0 +1,126 @@
+/* Tags */
+
+body {
+	background-color: #131315;
+	color: white;
+	padding: 0 20px 20px 20px;
+}
+
+nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 4rem;
+}
+
+/* Classes */
+
+.content {
+	max-width: 2200px;
+	padding: 0 20px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.m-0 {
+	margin: 0;
+}
+
+.m-10 {
+	margin: 10px;
+}
+
+.w-100 {
+	width: 100%;
+}
+
+.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.nav-items > * {
+	padding: 0 12px;
+	font-size: 0.9rem;
+}
+
+.nav-items .n-icon {
+	font-size: 1.2rem;
+}
+
+.container {
+	margin: 0 20px;
+}
+
+.small-txt {
+	font-size: 0.8rem;
+	margin: 0;
+}
+
+.r-90 {
+	transform: rotate(90deg);
+}
+
+.authMenu {
+	display: contents !important;
+}
+
+.authMenu :nth-child(1) {
+	margin-right: auto !important;
+}
+
+.tag-label {
+	margin-top: 1.5rem;
+}
+
+.tag-label p {
+	position: absolute;
+	margin: 0;
+	top: -1.3rem;
+	left: 0;
+	font-size: 0.8rem;
+}
+
+.small-form {
+	flex-grow: 1;
+	max-width: 500px;
+}
+
+.title-input .n-base-selection {
+	--n-color: transparent !important;
+	padding: 10px 0;
+}
+
+.title-input .n-base-selection-overlay {
+	font-size: 1.4rem;
+	font-weight: bold;
+}
+
+/* Naive UI Override */
+
+.n-data-table-td {
+	word-break: break-word;
+}
+
+.n-data-table-td span {
+	word-break: keep-all;
+}
+
+.item-card .n-card__content {
+	padding-top: 10px !important;
+}
+
+.n-form {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.n-base-selection-input {
+	cursor: text !important;
+}
+
+.n-button__icon {
+	padding-right: 8px;
+}

@@ -1,0 +1,60 @@
+<template>
+	<n-config-provider :theme="darkTheme">
+		<app-bar ref="appBar" class="nav" />
+		<n-dialog-provider>
+			<div class="content">
+				<router-view />
+			</div>
+		</n-dialog-provider>
+	</n-config-provider>
+</template>
+
+<script>
+import { NConfigProvider, darkTheme, NDialogProvider } from 'naive-ui';
+import AppBar from '@/components/appBar';
+import OrdersController from '@/controllers/OrdersController';
+
+export default {
+	components: {
+		AppBar,
+		NConfigProvider,
+		NDialogProvider,
+	},
+	computed: {
+		authenticated: function () {
+			return this.$store.state.authenticated;
+		},
+	},
+	watch: {
+		authenticated: function (isAuthenticated) {
+			if (isAuthenticated) this.updateData();
+		},
+	},
+	setup() {
+		return {
+			darkTheme,
+		};
+	},
+	beforeMount() {
+		this.updateData();
+	},
+	methods: {
+		async updateData() {
+			let authenticated = await this.$auth.isAuthenticated();
+
+			if (authenticated) {
+				let token = await this.$auth.getAccessToken();
+				this.$store.state.accessToken = token;
+
+				let user = await this.$auth.getUser();
+				let userResp = await OrdersController.getUser(token, user.email);
+
+				Object.assign(user, userResp);
+				this.$store.state.user = user;
+
+				this.$refs.appBar.updateData(user, authenticated);
+			}
+		},
+	},
+};
+</script>
